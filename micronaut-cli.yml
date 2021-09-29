@@ -1,0 +1,6 @@
+applicationType: default
+defaultPackage: org.yeffrey
+testFramework: spock
+sourceLanguage: java
+buildTool: gradle_kotlin
+features: [annotation-api, app-name, data, data-jdbc, gradle, hibernate-validator, http-client, java, java-application, jdbc-hikari, jooq, liquibase, logback, netty-server, postgres, readme, security, security-annotations, security-session, shade, spock, testcontainers, yaml]

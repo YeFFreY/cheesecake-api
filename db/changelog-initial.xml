@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd
+      http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.2.xsd">
+
+    <changeSet id="0.0.1" author="yeffrey">
+        <sql>CREATE EXTENSION IF NOT EXISTS "uuid-ossp";</sql>
+    </changeSet>
+    <changeSet id="0.0.2" author="yeffrey" runOnChange="true">
+        <createProcedure>
+            <![CDATA[
+            CREATE OR REPLACE FUNCTION update_timestamp() RETURNS TRIGGER AS
+            $body$
+            BEGIN
+                new.last_updated_at := NOW();
+                RETURN new;
+            END;
+            $body$ LANGUAGE plpgsql;
+            ]]>
+        </createProcedure>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,531 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd
+      http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.2.xsd">
+
+    <changeSet id="1.0.0" author="yeffrey">
+        <sql>
+            <![CDATA[
+            CREATE TABLE T_PARTY_TYPE
+            (
+                "id"        varchar(50) NOT NULL,
+                description text        NOT NULL,
+                CONSTRAINT PK__PARTY_TYPE PRIMARY KEY ("id")
+            );
+            COMMENT
+            ON TABLE T_PARTY_TYPE IS 'Describes whether the party is an organization, a user,... (ORG, USR,...)';
+            ]]>
+        </sql>
+        <rollback>DROP TABLE T_PARTY_TYPE;</rollback>
+    </changeSet>
+
+    <changeSet id="1.0.1" author="yeffrey">
+        <sql>
+            <![CDATA[
+            CREATE TABLE T_PARTY
+            (
+                created_at      timestamp with time zone NOT NULL DEFAULT now(),
+                last_updated_at timestamp with time zone NOT NULL DEFAULT now(),
+                active          boolean                  NOT NULL,
+                type_id         varchar(50)              NOT NULL,
+                "id"            uuid                     NOT NULL,
+                CONSTRAINT PK__PARTY PRIMARY KEY ("id"),
+                CONSTRAINT FK__PARTY_TYPE__PARTY FOREIGN KEY (type_id) REFERENCES T_PARTY_TYPE ("id")
+            );
+
+            CREATE INDEX IDX__PARTY__TYPE_ID ON T_PARTY
+                (
+                 type_id
+                    );
+
+            COMMENT
+            ON TABLE T_PARTY IS 'A party is the super type for any... party like a user, an organization (a school, a classroom,...)';
+
+            CREATE TRIGGER T_PARTY__LAST_UPDATED
+                BEFORE UPDATE
+                ON T_PARTY
+                FOR EACH ROW
+                EXECUTE FUNCTION update_timestamp();
+            ]]>
+        </sql>
+        <rollback>DROP TABLE T_PARTY;</rollback>
+    </changeSet>
+
+    <changeSet id="1.0.2" author="yeffrey">
+        <sql>
+            <![CDATA[
+            CREATE TABLE T_PARTY_RELATIONSHIP_TYPE
+            (
+                "id"        varchar(50) NOT NULL,
+                description text        NOT NULL,
+                CONSTRAINT PK__PARTY_RELATIONSHIP_TYPE PRIMARY KEY ("id")
+            );
+
+            COMMENT
+            ON TABLE T_PARTY_RELATIONSHIP_TYPE IS 'Describes the possible relationship between two parties : being a member of, friend of, family relation,...';
+            ]]>
+        </sql>
+        <rollback>DROP TABLE T_PARTY_RELATIONSHIP_TYPE;</rollback>
+    </changeSet>
+
+    <changeSet id="1.0.3" author="yeffrey">
+        <sql>
+            <![CDATA[
+            CREATE TABLE T_PARTY_RELATIONSHIP
+            (
+                effective_date date        NOT NULL,
+                until_date     date NULL,
+                type_id        varchar(50) NOT NULL,
+                "to"           uuid        NOT NULL,
+                "from"         uuid        NOT NULL,
+                "id"           uuid        NOT NULL,
+                CONSTRAINT PK__PARTY_RELATIONSHIP PRIMARY KEY ("id"),
+                CONSTRAINT FK__PARTY__PARTY_RELATIONSHIP__FROM FOREIGN KEY ("from") REFERENCES T_PARTY ("id"),
+                CONSTRAINT FK__PARTY__PARTY_RELATIONSHIP__TO FOREIGN KEY ("to") REFERENCES T_PARTY ("id"),
+                CONSTRAINT FK__PARTY_RELATIONSHIP_TYPE__PARTY_RELATIONSHIP FOREIGN KEY (type_id) REFERENCES T_PARTY_RELATIONSHIP_TYPE ("id")
+            );
+
+            CREATE INDEX IDX__PARTY_RELATIONSHIP__FROM ON T_PARTY_RELATIONSHIP
+                (
+                 "from"
+                    );
+
+            CREATE INDEX IDX__PARTY_RELATIONSHIP__TO ON T_PARTY_RELATIONSHIP
+                (
+                 "to"
+                    );
+
+            CREATE INDEX IDX__PARTY_RELATIONSHIP__TYPE_ID ON T_PARTY_RELATIONSHIP
+                (
+                 type_id
+                    );
+
+            COMMENT
+            ON TABLE T_PARTY_RELATIONSHIP IS 'Describes the relation between two parties, like "Member of", "Friend", ... If a user is member of an organization, and the organization has "reader" access control on an inventory item, then the user has "reader" access on the inventory item';
+            ]]>
+        </sql>
+        <rollback>DROP TABLE T_PARTY_RELATIONSHIP;</rollback>
+    </changeSet>
+
+    <changeSet id="1.0.4" author="yeffrey">
+        <sql>
+            <![CDATA[
+            CREATE TABLE T_ORGANIZATION
+            (
+                name character varying(320) NOT NULL,
+                "id" uuid                   NOT NULL,
+                CONSTRAINT PK__ORGANIZATION PRIMARY KEY ("id"),
+                CONSTRAINT FK__PARTY__ORGANIZATION FOREIGN KEY ("id") REFERENCES T_PARTY ("id")
+            );
+
+            CREATE INDEX IDX__ORGANIZATION__ID ON T_ORGANIZATION
+                (
+                 "id"
+                    );
+            ]]>
+        </sql>
+        <rollback>DROP TABLE T_ORGANIZATION;</rollback>
+    </changeSet>
+
+    <changeSet id="1.0.5" author="yeffrey">
+        <sql>
+            <![CDATA[
+            CREATE TABLE T_USER
+            (
+                email character varying(320) NOT NULL,
+                "id"  uuid                   NOT NULL,
+                CONSTRAINT PK__USER PRIMARY KEY ("id"),
+                CONSTRAINT UK__USER__EMAIL UNIQUE (email),
+                CONSTRAINT FK__PARTY__USER FOREIGN KEY ("id") REFERENCES T_PARTY ("id")
+            );
+
+            CREATE INDEX IDX__USER__ID ON T_USER
+                (
+                 "id"
+                    );
+            ]]>
+        </sql>
+        <rollback>DROP TABLE T_USER;</rollback>
+    </changeSet>
+
+    <changeSet id="1.0.6" author="yeffrey">
+        <sql>
+            <![CDATA[
+            CREATE TABLE T_CREDENTIALS
+            (
+                password character varying(100) NOT NULL,
+                "id"     uuid                   NOT NULL,
+                CONSTRAINT PK__CREDENTIALS PRIMARY KEY ("id"),
+                CONSTRAINT FK__CREDENTIALS__USER FOREIGN KEY ("id") REFERENCES T_USER ("id")
+            );
+
+            CREATE INDEX IDX__CREDENTIALS__ID ON T_CREDENTIALS
+                (
+                 "id"
+                    );
+            ]]>
+        </sql>
+        <rollback>DROP TABLE T_CREDENTIALS;</rollback>
+    </changeSet>
+
+    <changeSet id="1.0.7" author="yeffrey">
+        <sql>
+            <![CDATA[
+            CREATE TABLE T_ARTIFACT_TYPE
+            (
+                "id"        varchar(50) NOT NULL,
+                description text        NOT NULL,
+                CONSTRAINT PK__ARTIFACT_TYPE PRIMARY KEY ("id")
+            );
+
+            COMMENT
+            ON TABLE T_ARTIFACT_TYPE IS 'Describes whether the artifact is an activity, a skill, an equipment,...';
+            ]]>
+        </sql>
+        <rollback>DROP TABLE T_ARTIFACT_TYPE;</rollback>
+    </changeSet>
+
+    <changeSet id="1.0.8" author="yeffrey">
+        <sql>
+            <![CDATA[
+            CREATE TABLE T_ARTIFACT
+            (
+                "id"            uuid                     NOT NULL,
+                created_at      timestamp with time zone NOT NULL DEFAULT now(),
+                type_id         varchar(50) NOT NULL,
+                last_updated_at timestamp with time zone NOT NULL DEFAULT now(),
+                name            character varying(320)   NOT NULL,
+                description     text                     NOT NULL,
+                CONSTRAINT PK__ARTIFACT PRIMARY KEY ("id"),
+                CONSTRAINT FK__ARTIFACT_TYPE__ARTIFACT FOREIGN KEY (type_id) REFERENCES T_ARTIFACT_TYPE ("id")
+            );
+
+            CREATE INDEX IDX__ARTIFACT__TYPE_ID ON T_ARTIFACT
+                (
+                 type_id
+                    );
+
+            COMMENT
+            ON TABLE T_ARTIFACT IS 'an artifact in general to allow ownership, permission, ... globally';
+
+            CREATE TRIGGER T_ARTIFACT__LAST_UPDATED
+                BEFORE UPDATE
+                ON T_ARTIFACT
+                FOR EACH ROW
+                EXECUTE FUNCTION update_timestamp();
+            ]]>
+        </sql>
+        <rollback>DROP TABLE T_ARTIFACT;</rollback>
+    </changeSet>
+
+    <changeSet id="1.0.9" author="yeffrey">
+        <sql>
+            <![CDATA[
+            CREATE TABLE T_TAG
+            (
+                "id"        varchar(50)            NOT NULL,
+                description character varying(320) NOT NULL,
+                CONSTRAINT PK__TAG PRIMARY KEY ("id")
+            );
+            ]]>
+        </sql>
+        <rollback>DROP TABLE T_TAG;</rollback>
+    </changeSet>
+
+    <changeSet id="1.0.10" author="yeffrey">
+        <sql>
+            <![CDATA[
+            CREATE TABLE T_ARTIFACT_TAG
+            (
+                tag_id      varchar(50) NOT NULL,
+                artifact_id uuid        NOT NULL,
+                CONSTRAINT PK__ARTIFACT_TAG PRIMARY KEY (tag_id, artifact_id),
+                CONSTRAINT FK__ARTIFACT__ARTIFACT_TAG FOREIGN KEY (artifact_id) REFERENCES T_ARTIFACT ("id"),
+                CONSTRAINT FK__TAG__ARTIFACT_TAG FOREIGN KEY (tag_id) REFERENCES T_TAG ("id")
+            );
+
+            CREATE INDEX IDX__ARTIFACT_TAG__ARTIFACT_ID ON T_ARTIFACT_TAG
+                (
+                 artifact_id
+                    );
+
+            CREATE INDEX IDX__ARTIFACT_TAG__TAG_ID ON T_ARTIFACT_TAG
+                (
+                 tag_id
+                    );
+
+            COMMENT
+            ON TABLE T_ARTIFACT_TAG IS 'classification of an artifact';
+            ]]>
+        </sql>
+        <rollback>DROP TABLE T_ARTIFACT_TAG;</rollback>
+    </changeSet>
+
+    <changeSet id="1.0.11" author="yeffrey">
+        <sql>
+            <![CDATA[
+            CREATE TABLE T_ACTIVITY
+            (
+                published              boolean NOT NULL,
+                duration               int4range NULL,
+                age                    int4range NULL,
+                participants           int4range NULL,
+                difficulty             integer NULL,
+                rating                 integer NULL,
+                participant_goal       text NULL,
+                playground_description text NULL,
+                "id"                   uuid    NOT NULL,
+                CONSTRAINT PK__ACTIVITY PRIMARY KEY ("id"),
+                CONSTRAINT FK__ARTIFACT__ACTIVITY FOREIGN KEY ("id") REFERENCES T_ARTIFACT ("id"),
+                CONSTRAINT CHK__ACTIVITY__DIFFICULTY CHECK ( difficulty >= 0 AND difficulty <= 5 ),
+                CONSTRAINT CHK__ACTIVITY__RATING CHECK ( rating >= 0 AND rating <= 5 )
+            );
+
+            CREATE INDEX IDX__ACTIVITY__ID ON T_ACTIVITY
+                (
+                 "id"
+                    );
+            ]]>
+        </sql>
+        <rollback>DROP TABLE T_ACTIVITY;</rollback>
+    </changeSet>
+
+    <changeSet id="1.0.12" author="yeffrey">
+        <sql>
+            <![CDATA[
+            CREATE TABLE T_EQUIPMENT
+            (
+                "id" uuid NOT NULL,
+                CONSTRAINT PK__EQUIPMENT PRIMARY KEY ("id"),
+                CONSTRAINT FK__ARTIFACT_EQUIPMENT FOREIGN KEY ("id") REFERENCES T_ARTIFACT ("id")
+            );
+
+            CREATE INDEX IDX__EQUIPMENT__ID ON T_EQUIPMENT
+                (
+                 "id"
+                    );
+
+            COMMENT
+            ON TABLE T_EQUIPMENT IS 'Equipment useful to perform the activity';
+            ]]>
+        </sql>
+        <rollback>DROP TABLE T_EQUIPMENT;</rollback>
+    </changeSet>
+
+    <changeSet id="1.0.13" author="yeffrey">
+        <sql>
+            <![CDATA[
+            CREATE TABLE T_MATERIALS
+            (
+                activity_id  uuid    NOT NULL,
+                equipment_id uuid    NOT NULL,
+                quantity     integer NOT NULL,
+                CONSTRAINT PK__MATERIALS PRIMARY KEY (activity_id, equipment_id),
+                CONSTRAINT FK__ACTIVITY__MATERIALS FOREIGN KEY (activity_id) REFERENCES T_ACTIVITY ("id"),
+                CONSTRAINT FK__EQUIPMENT__MATERIALS FOREIGN KEY (equipment_id) REFERENCES T_EQUIPMENT ("id")
+            );
+
+            CREATE INDEX IDX__MATERIALS__ACTIVITY_ID ON T_MATERIALS
+                (
+                 activity_id
+                    );
+
+            CREATE INDEX IDX__MATERIALS__EQUIPMENT_ID ON T_MATERIALS
+                (
+                 equipment_id
+                    );
+
+            COMMENT
+            ON TABLE T_MATERIALS IS 'materials required to perform the activity';
+            ]]>
+        </sql>
+        <rollback>DROP TABLE T_MATERIALS;</rollback>
+    </changeSet>
+
+    <changeSet id="1.0.14" author="yeffrey">
+        <sql>
+            <![CDATA[
+            CREATE TABLE T_SKILL
+            (
+                "id" uuid NOT NULL,
+                CONSTRAINT PK__SKILL PRIMARY KEY ("id"),
+                CONSTRAINT FK__ARTIFACT__SKILL FOREIGN KEY ("id") REFERENCES T_ARTIFACT ("id")
+            );
+
+            CREATE INDEX IDX__SKILL__ID ON T_SKILL
+                (
+                 "id"
+                    );
+
+            COMMENT
+            ON TABLE T_SKILL IS 'Skill improved during the course of an activity';
+            ]]>
+        </sql>
+        <rollback>DROP TABLE T_SKILL;</rollback>
+    </changeSet>
+
+    <changeSet id="1.0.15" author="yeffrey">
+        <sql>
+            <![CDATA[
+            CREATE TABLE T_ACTIVITY_BENEFIT
+            (
+                level       integer NOT NULL,
+                activity_id uuid    NOT NULL,
+                skill_id    uuid    NOT NULL,
+                CONSTRAINT PK__ACTIVITY_BENEFIT PRIMARY KEY (activity_id, skill_id),
+                CONSTRAINT FK__ACTIVITY__ACTIVITY_BENEFIT FOREIGN KEY (activity_id) REFERENCES T_ACTIVITY ("id"),
+                CONSTRAINT FK__SKILL__ACTIVITY_BENEFIT FOREIGN KEY (skill_id) REFERENCES T_SKILL ("id"),
+                CONSTRAINT CHK__ACTIVITY_BENEFIT__LEVEL CHECK ( level >= 0 AND level <= 5 )
+            );
+
+            CREATE INDEX IDX__ACTIVITY_BENEFIT__ACTIVITY_ID ON T_ACTIVITY_BENEFIT
+                (
+                 activity_id
+                    );
+
+            CREATE INDEX IDX__ACTIVITY_BENEFIT__SKILL_ID ON T_ACTIVITY_BENEFIT
+                (
+                 skill_id
+                    );
+
+            COMMENT
+            ON TABLE T_ACTIVITY_BENEFIT IS 'How the activity is beneficial to the participant';
+            ]]>
+        </sql>
+        <rollback>DROP TABLE T_ACTIVITY_BENEFIT;</rollback>
+    </changeSet>
+
+    <changeSet id="1.0.16" author="yeffrey">
+        <sql>
+            <![CDATA[
+            CREATE TABLE T_WAREHOUSE_ITEM
+            (
+                party_id     uuid NOT NULL,
+                equipment_id uuid NOT NULL,
+                CONSTRAINT PK__WAREHOUSE_ITEM PRIMARY KEY (party_id, equipment_id),
+                CONSTRAINT FK__EQUIPMENT__WAREHOUSE_ITEM FOREIGN KEY (equipment_id) REFERENCES T_EQUIPMENT ("id"),
+                CONSTRAINT FK__PARTY__WAREHOUSE_ITEM FOREIGN KEY (party_id) REFERENCES T_PARTY ("id")
+            );
+
+            CREATE INDEX IDX__WAREHOUSE_ITEM__EQUIPMENT_ID ON T_WAREHOUSE_ITEM
+                (
+                 equipment_id
+                    );
+
+            CREATE INDEX IDX_WAREHOUSE_ITEM__PARTY_ID ON T_WAREHOUSE_ITEM
+                (
+                 party_id
+                    );
+
+            COMMENT
+            ON TABLE T_WAREHOUSE_ITEM IS 'An equipment available in the warehouse of the party';
+            ]]>
+        </sql>
+        <rollback>DROP TABLE T_WAREHOUSE_ITEM;</rollback>
+    </changeSet>
+
+    <changeSet id="1.0.17" author="yeffrey">
+        <sql>
+            <![CDATA[
+            CREATE TABLE T_OPERATION_TYPE
+            (
+                "id"        character varying(50) NOT NULL,
+                description text                  NOT NULL,
+                CONSTRAINT PK__OPERATION_TYPE PRIMARY KEY ("id")
+            );
+
+            COMMENT
+            ON TABLE T_OPERATION_TYPE IS 'Type of an operation for the course of the activity like "setup", "core", "closing",...';
+            ]]>
+        </sql>
+        <rollback>DROP TABLE T_OPERATION_TYPE;</rollback>
+    </changeSet>
+
+    <changeSet id="1.0.18" author="yeffrey">
+        <sql>
+            <![CDATA[
+            CREATE TABLE T_OPERATION
+            (
+                description text                  NOT NULL,
+                activity_id uuid                  NOT NULL,
+                type_id     character varying(50) NOT NULL,
+                CONSTRAINT PK__OPERATION PRIMARY KEY (activity_id, type_id),
+                CONSTRAINT FK__ACTIVITY__OPERATION FOREIGN KEY (activity_id) REFERENCES T_ACTIVITY ("id"),
+                CONSTRAINT FK__OPERATION_TYPE__OPERATION FOREIGN KEY (type_id) REFERENCES T_OPERATION_TYPE ("id")
+            );
+
+            CREATE INDEX IDX__OPERATION__ACTIVITY_ID ON T_OPERATION
+                (
+                 activity_id
+                    );
+
+            CREATE INDEX IDX__OPERATION__TYPE_ID ON T_OPERATION
+                (
+                 type_id
+                    );
+
+            COMMENT
+            ON TABLE T_OPERATION IS 'Describe each step of the course of the activity';
+            ]]>
+        </sql>
+        <rollback>DROP TABLE T_OPERATION;</rollback>
+    </changeSet>
+
+    <changeSet id="1.0.19" author="yeffrey">
+        <sql>
+            <![CDATA[
+            CREATE TABLE T_INVENTORY_ACCESS_CONTROL_TYPE
+            (
+                "id"        varchar(50) NOT NULL,
+                description text        NOT NULL,
+                CONSTRAINT PK__INVENTORY_ACCESS_CONTROL_TYPE PRIMARY KEY ("id")
+            );
+
+            COMMENT
+            ON TABLE T_INVENTORY_ACCESS_CONTROL_TYPE IS 'How the party can access the artifact like "owner", "reader", "writer",...';
+            ]]>
+        </sql>
+        <rollback>DROP TABLE T_INVENTORY_ACCESS_CONTROL_TYPE;</rollback>
+    </changeSet>
+
+    <changeSet id="1.0.20" author="yeffrey">
+        <sql>
+            <![CDATA[
+            CREATE TABLE T_INVENTORY_ITEM
+            (
+                access_control_type_id varchar(50) NOT NULL,
+                artifact_id            uuid        NOT NULL,
+                party_id               uuid        NOT NULL,
+                CONSTRAINT PK__INVENTORY_ITEM PRIMARY KEY (artifact_id, party_id),
+                CONSTRAINT FK__INVENTORY_ACCESS_CONTROL_TYPE__INVENTORY_ITEM FOREIGN KEY (access_control_type_id) REFERENCES T_INVENTORY_ACCESS_CONTROL_TYPE ("id"),
+                CONSTRAINT FK__ARTIFACT__INVENTORY_ITEM FOREIGN KEY (artifact_id) REFERENCES T_ARTIFACT ("id"),
+                CONSTRAINT FK__PARTY__INVENTORY_ITEM FOREIGN KEY (party_id) REFERENCES T_PARTY ("id")
+            );
+
+            CREATE INDEX IDX__INVENTORY_ITEM__ACCESS_CONTROL_TYPE_ID ON T_INVENTORY_ITEM
+                (
+                 access_control_type_id
+                    );
+
+            CREATE INDEX IDX__INVENTORY_ITEM__ARTIFACT_ID ON T_INVENTORY_ITEM
+                (
+                 artifact_id
+                    );
+
+            CREATE INDEX IDX__INVENTORY_ITEM__PARTY_ID ON T_INVENTORY_ITEM
+                (
+                 party_id
+                    );
+
+            COMMENT
+            ON TABLE T_INVENTORY_ITEM IS 'An artifact which belongs to a party, to its "portfolio"';
+            ]]>
+        </sql>
+        <rollback>DROP TABLE T_INVENTORY_ITEM;</rollback>
+    </changeSet>
+
+
+</databaseChangeLog>

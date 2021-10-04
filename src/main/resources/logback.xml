@@ -1,4 +1,7 @@
 <configuration>
+    <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator"> <!-- This allow JUL logging to be formatted cf Liquibase https://micronaut-projects.github.io/micronaut-liquibase/latest/guide/index.html-->
+        <resetJUL>true</resetJUL>
+    </contextListener>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <withJansi>false</withJansi>

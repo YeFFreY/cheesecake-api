@@ -40,6 +40,7 @@ dependencies {
     testImplementation("org.testcontainers:spock")
     testImplementation("org.testcontainers:testcontainers")
     implementation("io.micronaut:micronaut-validation")
+    implementation("org.slf4j:jul-to-slf4j:1.7.32") // Because liquibase use JUL for logging, this allows to get logging format same as micronaut https://micronaut-projects.github.io/micronaut-liquibase/latest/guide/index.html
 
 }
 

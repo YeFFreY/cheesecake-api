@@ -9,5 +9,5 @@ datasources:
     driverClassName: org.postgresql.Driver
     username: cheesecaker
     password: 'cheesecaker'
-    schema-generate: CREATE_DROP
+    schema-generate: none
     dialect: POSTGRES

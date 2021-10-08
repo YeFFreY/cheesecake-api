@@ -18,7 +18,7 @@ import java.util.Optional;
 @Requires(condition = SessionAuthenticationModeCondition.class)
 @Singleton
 @Primary
-public class SessionLogoutHandler implements LogoutHandler {
+class SessionLogoutHandler implements LogoutHandler {
     @Override
     public MutableHttpResponse<?> logout(HttpRequest<?> request) {
         MutableConvertibleValues<Object> attrs = request.getAttributes();

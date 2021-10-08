@@ -7,7 +7,7 @@ import javax.transaction.Transactional;
 import javax.validation.constraints.NotBlank;
 
 @Singleton
-public class LoginService {
+class LoginService {
 
     private final LoginRepository repository;
     private final PasswordEncoder passwordEncoder;

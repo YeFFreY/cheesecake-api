@@ -19,7 +19,7 @@ import jakarta.inject.Singleton;
 @Requires(condition = SessionAuthenticationModeCondition.class)
 @Singleton
 @Primary
-public class SessionLoginHandler implements LoginHandler {
+class SessionLoginHandler implements LoginHandler {
 
     protected final SessionStore<Session> sessionStore;
 

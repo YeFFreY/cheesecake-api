@@ -12,7 +12,7 @@ import reactor.core.publisher.FluxSink;
 import java.util.Objects;
 
 @Singleton
-public class DatabaseAuthenticationProvider implements AuthenticationProvider {
+class DatabaseAuthenticationProvider implements AuthenticationProvider {
     private final LoginService loginService;
 
     public DatabaseAuthenticationProvider(LoginService loginService) {

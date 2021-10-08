@@ -2,6 +2,7 @@ plugins {
     id("groovy") 
     id("com.github.johnrengelman.shadow") version "7.0.0"
     id("io.micronaut.application") version "2.0.6"
+    id("nu.studer.jooq") version "6.0.1"
 }
 
 version = "0.1"
@@ -26,6 +27,7 @@ dependencies {
     annotationProcessor("io.micronaut.security:micronaut-security-annotations")
     implementation("io.micronaut:micronaut-http-client")
     implementation("io.micronaut:micronaut-runtime")
+    implementation("io.micronaut.reactor:micronaut-reactor")
     implementation("io.micronaut.beanvalidation:micronaut-hibernate-validator")
     implementation("io.micronaut.data:micronaut-data-jdbc")
     implementation("io.micronaut.liquibase:micronaut-liquibase")
@@ -42,6 +44,12 @@ dependencies {
     implementation("io.micronaut:micronaut-validation")
     implementation("org.slf4j:jul-to-slf4j:1.7.32") // Because liquibase use JUL for logging, this allows to get logging format same as micronaut https://micronaut-projects.github.io/micronaut-liquibase/latest/guide/index.html
 
+    jooqGenerator("org.postgresql:postgresql:42.2.23")
+    implementation("org.springframework.security:spring-security-crypto:5.5.2")
+    implementation("org.bouncycastle:bcprov-jdk15on:1.69")
+    implementation("commons-logging:commons-logging:1.2")
+
+
 }
 
 
@@ -53,5 +61,36 @@ java {
     targetCompatibility = JavaVersion.toVersion("16")
 }
 
+jooq {
+    version.set("3.15.1")
+    edition.set(nu.studer.gradle.jooq.JooqEdition.OSS)
+    configurations {
+        create("main") {
+            jooqConfiguration.apply {
+                logging = org.jooq.meta.jaxb.Logging.WARN
+                jdbc.apply {
+                    driver = "org.postgresql.Driver"
+                    url = "jdbc:postgresql://localhost:5432/cheesecake_dev"
+                    user = "cheesecaker"
+                    password = "cheesecaker"
+                }
+                generator.apply {
+                    target.apply {
+                        packageName = "org.yeffrey.cheesecake"
+                        directory = "src/generated/jooq"
+                    }
+                    generate.apply {
+                        isValidationAnnotations = true
+                        isFluentSetters = true
+                    }
+                    database.apply {
+                        inputSchema = "public"
+                        excludes = "databasechangelog|databasechangeloglock"
+                    }
+                }
+            }
+        }
+    }
+}
 
 

@@ -3,6 +3,20 @@ micronaut:
     name: cheesecake
   security:
     authentication: session
+    endpoints:
+      login:
+        path: /auth/login
+      logout:
+        path: /auth/logout
+    intercept-url-map:
+      - pattern: /auth/register
+        http-method: POST
+        access:
+          - isAnonymous()
+      - pattern: /auth/session
+        http-method: GET
+        access:
+          - isAuthenticated()
 datasources:
   default:
     url: jdbc:postgresql://localhost:5432/cheesecake_dev

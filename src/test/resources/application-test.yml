@@ -1,4 +1,7 @@
 datasources:
   default:
-    url: jdbc:tc:postgresql:12:///postgres
-    driverClassName: org.testcontainers.jdbc.ContainerDatabaseDriver
+    url: jdbc:postgresql://localhost:5432/cheesecake_tst
+    driverClassName: org.postgresql.Driver
+    username: cheesecaker
+    password: 'cheesecaker'
+    dialect: POSTGRES

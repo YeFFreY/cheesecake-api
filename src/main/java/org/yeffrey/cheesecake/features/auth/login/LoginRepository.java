@@ -9,7 +9,7 @@ import static org.yeffrey.cheesecake.Tables.T_CREDENTIALS;
 import static org.yeffrey.cheesecake.Tables.T_USER;
 
 @Singleton
-public class LoginRepository {
+class LoginRepository {
 
     private final DSLContext ctx;
 

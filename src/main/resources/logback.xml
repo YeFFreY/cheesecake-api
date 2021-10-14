@@ -13,6 +13,8 @@
     </appender>
 
     <logger name="io.micronaut.transaction.jdbc.DataSourceTransactionManager" level="DEBUG"/>
+    <logger name="org.jooq.tools.LoggerListener" level="DEBUG" />
+    <logger name="org.jooq.Constants" level="WARN" />
 
     <root level="info">
         <appender-ref ref="STDOUT" />

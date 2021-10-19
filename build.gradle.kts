@@ -38,9 +38,6 @@ dependencies {
     implementation("javax.annotation:javax.annotation-api")
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("org.postgresql:postgresql")
-    testImplementation("org.testcontainers:postgresql")
-    testImplementation("org.testcontainers:spock")
-    testImplementation("org.testcontainers:testcontainers")
     implementation("io.micronaut:micronaut-validation")
     implementation("org.slf4j:jul-to-slf4j:1.7.32") // Because liquibase use JUL for logging, this allows to get logging format same as micronaut https://micronaut-projects.github.io/micronaut-liquibase/latest/guide/index.html
 
@@ -49,6 +46,10 @@ dependencies {
     implementation("org.bouncycastle:bcprov-jdk15on:1.69")
     implementation("commons-logging:commons-logging:1.2")
 
+    testImplementation("org.testcontainers:postgresql")
+    testImplementation("org.testcontainers:spock")
+    testImplementation("org.testcontainers:testcontainers")
+    testImplementation("com.github.javafaker:javafaker:1.0.2")
 
 }
 

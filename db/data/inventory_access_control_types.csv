@@ -1,0 +1,3 @@
+id,description
+READER,'Party is allowed to read only'
+AUTHOR,'Party is the author of the artifact and has thus all privileges'

@@ -7,7 +7,6 @@ public class QueryResult<T> {
         this.data = data;
     }
 
-
     public static <T> QueryResult<T> from(T data) {
         return new QueryResult<>(data);
     }

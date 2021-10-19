@@ -49,4 +49,26 @@
                         usePreparedStatements="true">
         </loadUpdateData>
     </changeSet>
+
+    <changeSet id="data-1.0.4" author="yeffrey" runOnChange="true">
+        <loadUpdateData file="data/inventory_access_control_types.csv"
+                        primaryKey="id"
+                        quotchar="'"
+                        relativeToChangelogFile="true"
+                        schemaName="public"
+                        tableName="t_inventory_access_control_type"
+                        usePreparedStatements="true">
+        </loadUpdateData>
+    </changeSet>
+
+    <changeSet id="data-1.0.5" author="yeffrey" runOnChange="true">
+        <loadUpdateData file="data/artifact_types.csv"
+                        primaryKey="id"
+                        quotchar="'"
+                        relativeToChangelogFile="true"
+                        schemaName="public"
+                        tableName="t_artifact_type"
+                        usePreparedStatements="true">
+        </loadUpdateData>
+    </changeSet>
 </databaseChangeLog>

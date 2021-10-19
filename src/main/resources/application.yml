@@ -17,6 +17,9 @@ micronaut:
         http-method: GET
         access:
           - isAuthenticated()
+      - pattern: /api/**
+        access:
+          - isAuthenticated()
 datasources:
   default:
     url: jdbc:postgresql://localhost:5432/cheesecake_dev

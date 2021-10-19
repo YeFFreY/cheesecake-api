@@ -269,7 +269,7 @@
             <![CDATA[
             CREATE TABLE T_ACTIVITY
             (
-                published              boolean NOT NULL,
+                published              boolean NOT NULL DEFAULT false,
                 duration               int4range NULL,
                 age                    int4range NULL,
                 participants           int4range NULL,

@@ -1,0 +1,3 @@
+id,description
+FRIEND_OF,'Qualifies the relation between as FROM being Friend of TO in T_PARTY_RELATIONSHIP'
+TEACHER_IN,'Qualifies the relation between as FROM being Teacher in TO in T_PARTY_RELATIONSHIP'

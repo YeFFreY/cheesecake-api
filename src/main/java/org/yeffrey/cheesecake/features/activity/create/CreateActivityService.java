@@ -1,7 +1,7 @@
 package org.yeffrey.cheesecake.features.activity.create;
 
-import io.micronaut.security.authentication.AuthenticationException;
 import jakarta.inject.Singleton;
+import org.yeffrey.cheesecake.features.activity.create.domain.Activity;
 import org.yeffrey.cheesecake.shared.UserIdHelper;
 
 import javax.transaction.Transactional;
@@ -24,13 +24,11 @@ public class CreateActivityService {
         Activity activity = new Activity(
                 UUID.randomUUID(),
                 userIdHelper.getCurrentOrThrow(),
-                command.getName(),
-                command.getDescription()
+                command.name(),
+                command.description()
         );
         this.repository.create(activity);
-        return activity.id;
+        return activity.id();
     }
 
-    record Activity(UUID id, UUID ownerId, String name, String description) {
-    }
 }

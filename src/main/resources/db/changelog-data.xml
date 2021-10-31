@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <databaseChangeLog
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd
-      http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.2.xsd">
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
 
-    <changeSet id="data-1.0.0" author="yeffrey" runOnChange="true">
+    <changeSet id="party_types" author="yeffrey" runOnChange="true">
         <loadUpdateData file="data/party_types.csv"
                         primaryKey="id"
                         quotchar="'"
@@ -17,7 +15,7 @@
         </loadUpdateData>
     </changeSet>
 
-    <changeSet id="data-1.0.1" author="yeffrey" runOnChange="true">
+    <changeSet id="parties" author="yeffrey" runOnChange="true">
         <loadUpdateData file="data/parties.csv"
                         primaryKey="id"
                         quotchar="'"
@@ -28,7 +26,7 @@
         </loadUpdateData>
     </changeSet>
 
-    <changeSet id="data-1.0.2" author="yeffrey" runOnChange="true">
+    <changeSet id="users" author="yeffrey" runOnChange="true">
         <loadUpdateData file="data/users.csv"
                         primaryKey="id"
                         quotchar="'"
@@ -39,7 +37,7 @@
         </loadUpdateData>
     </changeSet>
 
-    <changeSet id="data-1.0.3" author="yeffrey" runOnChange="true">
+    <changeSet id="credentials" author="yeffrey" runOnChange="true">
         <loadUpdateData file="data/credentials.csv"
                         primaryKey="id"
                         quotchar="'"
@@ -50,7 +48,7 @@
         </loadUpdateData>
     </changeSet>
 
-    <changeSet id="data-1.0.4" author="yeffrey" runOnChange="true">
+    <changeSet id="inventory_access_control_types" author="yeffrey" runOnChange="true">
         <loadUpdateData file="data/inventory_access_control_types.csv"
                         primaryKey="id"
                         quotchar="'"
@@ -61,7 +59,7 @@
         </loadUpdateData>
     </changeSet>
 
-    <changeSet id="data-1.0.5" author="yeffrey" runOnChange="true">
+    <changeSet id="artifact_types" author="yeffrey" runOnChange="true">
         <loadUpdateData file="data/artifact_types.csv"
                         primaryKey="id"
                         quotchar="'"
@@ -71,4 +69,28 @@
                         usePreparedStatements="true">
         </loadUpdateData>
     </changeSet>
+
+    <changeSet id="party_relationship_types" author="yeffrey" runOnChange="true">
+        <loadUpdateData file="data/party_relationship_types.csv"
+                        primaryKey="id"
+                        quotchar="'"
+                        relativeToChangelogFile="true"
+                        schemaName="public"
+                        tableName="t_party_relationship_type"
+                        usePreparedStatements="true">
+        </loadUpdateData>
+    </changeSet>
+
+    <changeSet id="party_relationships" author="yeffrey" runOnChange="true">
+        <loadUpdateData file="data/party_relationships.csv"
+                        primaryKey="id"
+                        quotchar="'"
+                        relativeToChangelogFile="true"
+                        schemaName="public"
+                        tableName="t_party_relationship"
+                        usePreparedStatements="true">
+        </loadUpdateData>
+    </changeSet>
+
+
 </databaseChangeLog>

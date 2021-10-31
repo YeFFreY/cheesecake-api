@@ -24,6 +24,6 @@ public class CreateActivityController {
     @Post
     @Status(HttpStatus.CREATED)
     public CommandResult<UUID> createActivity(@Valid @Body CreateActivityCommand command) {
-        return CommandResult.from(service.create(command));
+        return new CommandResult<>(service.create(command));
     }
 }

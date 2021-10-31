@@ -2,6 +2,7 @@ package org.yeffrey.cheesecake.features.activity.create;
 
 import jakarta.inject.Singleton;
 import org.jooq.DSLContext;
+import org.yeffrey.cheesecake.features.activity.create.domain.Activity;
 
 import static org.yeffrey.cheesecake.Tables.*;
 
@@ -14,7 +15,7 @@ public class CreateActivityRepository {
         this.ctx = ctx;
     }
 
-    public void create(CreateActivityService.Activity activity) {
+    public void create(Activity activity) {
         ctx
                 .insertInto(T_ARTIFACT, T_ARTIFACT.ID, T_ARTIFACT.NAME, T_ARTIFACT.DESCRIPTION, T_ARTIFACT.TYPE_ID)
                 .values(activity.id(), activity.name(), activity.description(), "ACTIVITY")

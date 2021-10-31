@@ -5,3 +5,8 @@ datasources:
     username: cheesecaker
     password: 'cheesecaker'
     dialect: POSTGRES
+liquibase:
+  datasources:
+    default:
+      change-log: 'classpath:db/liquibase-changelog.xml'
+      drop-first: true

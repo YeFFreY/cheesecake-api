@@ -16,6 +16,6 @@ class UserSessionController {
         if(Objects.isNull(principal)) {
             return HttpResponse.unauthorized();
         }
-        return HttpResponse.ok(QueryResult.from(new UserSession(principal.getName())));
+        return HttpResponse.ok(new QueryResult<>(new UserSession(principal.getName())));
     }
 }

@@ -9,6 +9,7 @@ import org.yeffrey.cheesecake.core.infra.rest.CommandResult
 import org.yeffrey.cheesecake.core.infra.rest.QueryResult
 import org.yeffrey.cheesecake.features.activity.create.CreateActivityCommand
 import org.yeffrey.cheesecake.features.activity.details.domain.ActivityDetails
+import org.yeffrey.cheesecake.features.activity.edit.EditActivityCommand
 import org.yeffrey.cheesecake.features.activity.list.domain.ActivityOverview
 
 @Header(name = "Basic", value = "bob@bob.com secret77")
@@ -22,6 +23,13 @@ interface ActivityClient {
 
     @Get("/{activityId}")
     HttpResponse<QueryResult<ActivityDetails>> details(@PathVariable UUID activityId)
+
+    @Get("/edit/{activityId}")
+    HttpResponse<QueryResult<EditActivityCommand>> edit(@PathVariable UUID activityId)
+
+    @Post("/edit/{activityId}")
+    HttpResponse<CommandResult<UUID>> update(@PathVariable UUID activityId, @Body EditActivityCommand command)
+
 }
 
 trait ActivitiesFixtures {
@@ -34,4 +42,7 @@ trait ActivitiesFixtures {
         return activityClient.create(new CreateActivityCommand(name, description)).body().data()
     }
 
+    ActivityDetails details(UUID activityId) {
+        return activityClient.details(activityId).body().data()
+    }
 }

@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Validated
-@Controller("/api/activities")
+@Controller("/api/activities/{activityId}")
 public class DetailsActivityController {
 
     private final DetailsActivityService service;
@@ -22,7 +22,7 @@ public class DetailsActivityController {
         this.service = service;
     }
 
-    @Get("/{activityId}")
+    @Get
     @Status(HttpStatus.OK)
     public Optional<QueryResult<ActivityDetails>> details(@PathVariable UUID activityId) {
         return service.details(activityId).map(QueryResult::new);

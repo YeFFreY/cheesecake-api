@@ -25,9 +25,6 @@ public class DetailsActivityRepository {
                 .where(T_ARTIFACT.TYPE_ID.eq("ACTIVITY"))
                 .and(T_ARTIFACT.ID.eq(activityId))
                 .and(T_INVENTORY_ITEM.PARTY_ID.eq(userId))
-                .fetchOptional()
-                // todo find a better way for the mapping !
-                .map(record3 -> new ActivityDetails(record3.value1(), record3.value2(), record3.value3()));
-
+                .fetchOptionalInto(ActivityDetails.class);
     }
 }

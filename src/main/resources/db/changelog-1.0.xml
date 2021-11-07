@@ -193,10 +193,10 @@
             (
                 "id"            uuid                     NOT NULL,
                 created_at      timestamp with time zone NOT NULL DEFAULT now(),
-                type_id         varchar(50) NOT NULL,
+                type_id         varchar(50)              NOT NULL,
                 last_updated_at timestamp with time zone NOT NULL DEFAULT now(),
                 name            character varying(320)   NOT NULL,
-                description     text                     NOT NULL,
+                description     text                     NULL,
                 CONSTRAINT PK__ARTIFACT PRIMARY KEY ("id"),
                 CONSTRAINT FK__ARTIFACT_TYPE__ARTIFACT FOREIGN KEY (type_id) REFERENCES T_ARTIFACT_TYPE ("id")
             );

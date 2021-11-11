@@ -62,7 +62,7 @@ class EditActivityControllerTest extends CheesecakeSpecification implements Acti
         response.status() == HttpStatus.OK
 
         then:
-        def activityUpdated = details(response.body().data())
+        def activityUpdated = activityDetails(response.body().data())
         activityUpdated.name() == newActivityName
         activityUpdated.description() == newActivityDescription
 
@@ -90,7 +90,7 @@ class EditActivityControllerTest extends CheesecakeSpecification implements Acti
         error.status == HttpStatus.BAD_REQUEST
 
         then: "activity was not updated with wrong values"
-        def activityUpdated = details(activityId)
+        def activityUpdated = activityDetails(activityId)
         activityUpdated.name() == activityName
         activityUpdated.description() == activityDescription
 

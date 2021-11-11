@@ -28,3 +28,5 @@ datasources:
     password: 'cheesecaker'
     schema-generate: none
     dialect: POSTGRES
+jackson:
+  serialization-inclusion: non_absent

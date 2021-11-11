@@ -12,6 +12,7 @@ import org.yeffrey.cheesecake.core.infra.rest.CommandResult
 import org.yeffrey.cheesecake.core.infra.rest.QueryResult
 import org.yeffrey.cheesecake.features.skills.create.CreateSkillCommand
 import org.yeffrey.cheesecake.features.skills.list.domain.SkillOverview
+import spock.lang.Shared
 
 @Header(name = "Basic", value = "bob@bob.com secret77")
 @Client("/api/skills")
@@ -26,6 +27,7 @@ interface SkillClient {
 trait SkillsFixtures {
     abstract Faker getFaker()
 
+    @Shared
     @Inject
     SkillClient skillClient
 

@@ -11,6 +11,7 @@ import org.yeffrey.cheesecake.features.activity.create.CreateActivityCommand
 import org.yeffrey.cheesecake.features.activity.details.domain.ActivityDetails
 import org.yeffrey.cheesecake.features.activity.edit.EditActivityCommand
 import org.yeffrey.cheesecake.features.activity.list.domain.ActivityOverview
+import spock.lang.Shared
 
 @Header(name = "Basic", value = "bob@bob.com secret77")
 @Client("/api/activities")
@@ -35,6 +36,7 @@ interface ActivityClient {
 trait ActivitiesFixtures {
     abstract Faker getFaker()
 
+    @Shared
     @Inject
     ActivityClient activityClient
 
@@ -42,7 +44,7 @@ trait ActivitiesFixtures {
         return activityClient.create(new CreateActivityCommand(name, description)).body().data()
     }
 
-    ActivityDetails details(UUID activityId) {
+    ActivityDetails activityDetails(UUID activityId) {
         return activityClient.details(activityId).body().data()
     }
 }

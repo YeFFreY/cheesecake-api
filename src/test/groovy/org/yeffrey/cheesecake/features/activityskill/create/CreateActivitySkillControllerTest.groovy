@@ -44,7 +44,7 @@ class CreateActivitySkillControllerTest extends CheesecakeSpecification implemen
     void "association requires both an activity id and skill id"() {
 
         when: "associate skill to activity"
-        activitySkillClient.create(new CreateActivitySkillCommand(null, null))
+        activitySkillClient.create(new CreateActivitySkillCommand(activityId, skillId))
 
         then:
         HttpClientResponseException error = thrown()

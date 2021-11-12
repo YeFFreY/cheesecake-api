@@ -13,6 +13,7 @@ import org.yeffrey.cheesecake.core.infra.rest.CommandResult
 import org.yeffrey.cheesecake.core.infra.rest.QueryResult
 import org.yeffrey.cheesecake.features.activityskill.create.CreateActivitySkillCommand
 import org.yeffrey.cheesecake.features.activityskill.create.SkillOverview
+import org.yeffrey.cheesecake.features.activityskill.list.ActivitySkill
 
 @Header(name = "Basic", value = "bob@bob.com secret77")
 @Client("/api/activity-skills")
@@ -23,6 +24,9 @@ interface ActivitySkillClient {
 
     @Get("/available/{activityId}")
     HttpResponse<QueryResult<List<SkillOverview>>> listAvailable(UUID activityId)
+
+    @Get('/{activityId}')
+    HttpResponse<QueryResult<List<ActivitySkill>>> list(UUID activityId)
 }
 
 trait ActivitySkillsFixtures {

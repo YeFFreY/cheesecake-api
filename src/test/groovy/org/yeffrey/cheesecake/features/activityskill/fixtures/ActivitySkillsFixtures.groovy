@@ -13,6 +13,7 @@ import org.yeffrey.cheesecake.core.infra.rest.CommandResult
 import org.yeffrey.cheesecake.core.infra.rest.QueryResult
 import org.yeffrey.cheesecake.features.activityskill.create.CreateActivitySkillCommand
 import org.yeffrey.cheesecake.features.activityskill.create.SkillOverview
+import org.yeffrey.cheesecake.features.activityskill.delete.DeleteActivitySkillCommand
 import org.yeffrey.cheesecake.features.activityskill.list.ActivitySkill
 
 @Header(name = "Basic", value = "bob@bob.com secret77")
@@ -27,6 +28,9 @@ interface ActivitySkillClient {
 
     @Get('/{activityId}')
     HttpResponse<QueryResult<List<ActivitySkill>>> list(UUID activityId)
+
+    @Post('/delete')
+    HttpResponse<CommandResult<Void>> delete(@Body DeleteActivitySkillCommand command)
 }
 
 trait ActivitySkillsFixtures {
@@ -37,6 +41,10 @@ trait ActivitySkillsFixtures {
 
     HttpStatus createActivitySkill(UUID activityId, UUID skillId) {
         return activitySkillClient.create(new CreateActivitySkillCommand(activityId, skillId)).status()
+    }
+
+    List<ActivitySkill> list(UUID activityId) {
+        return activitySkillClient.list(activityId).body().data()
     }
 
 }

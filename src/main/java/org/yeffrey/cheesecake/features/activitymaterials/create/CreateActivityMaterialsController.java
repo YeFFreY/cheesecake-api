@@ -1,4 +1,4 @@
-package org.yeffrey.cheesecake.features.activityskill.create;
+package org.yeffrey.cheesecake.features.activitymaterials.create;
 
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.*;
@@ -12,23 +12,23 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Validated
-@Controller("/api/activity-skills")
-public class CreateActivitySkillController {
+@Controller("/api/activity-materials")
+public class CreateActivityMaterialsController {
 
-    private final CreateActivitySkillService service;
+    private final CreateActivityMaterialsService service;
 
-    public CreateActivitySkillController(CreateActivitySkillService service) {
+    public CreateActivityMaterialsController(CreateActivityMaterialsService service) {
         this.service = service;
     }
 
     @Get("/available/{activityId}")
-    public QueryResult<List<SkillOverview>> listAvailable(@PathVariable UUID activityId) {
+    public QueryResult<List<EquipmentOverview>> listAvailable(@PathVariable UUID activityId) {
         return new QueryResult<>(service.listAvailable(activityId));
     }
 
     @Post
     @Status(HttpStatus.CREATED)
-    public Optional<CommandResult<UUID>> create(@Valid @Body CreateActivitySkillCommand command) {
+    public Optional<CommandResult<UUID>> create(@Valid @Body CreateActivityMaterialsCommand command) {
         return service.create(command).map(CommandResult::new);
     }
 }

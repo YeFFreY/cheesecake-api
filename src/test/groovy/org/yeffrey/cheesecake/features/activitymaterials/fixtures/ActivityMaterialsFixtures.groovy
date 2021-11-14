@@ -13,6 +13,7 @@ import org.yeffrey.cheesecake.core.infra.rest.CommandResult
 import org.yeffrey.cheesecake.core.infra.rest.QueryResult
 import org.yeffrey.cheesecake.features.activitymaterials.create.CreateActivityMaterialsCommand
 import org.yeffrey.cheesecake.features.activitymaterials.create.EquipmentOverview
+import org.yeffrey.cheesecake.features.activitymaterials.delete.DeleteActivityMaterialsCommand
 import org.yeffrey.cheesecake.features.activitymaterials.list.ActivityMaterials
 
 @Header(name = "Basic", value = "bob@bob.com secret77")
@@ -28,6 +29,8 @@ interface ActivityMaterialsClient {
     @Get('/{activityId}')
     HttpResponse<QueryResult<List<ActivityMaterials>>> list(UUID activityId)
 
+    @Post('/delete')
+    HttpResponse<CommandResult<Void>> delete(@Body DeleteActivityMaterialsCommand command)
 }
 
 trait ActivityMaterialsFixtures {
@@ -38,5 +41,9 @@ trait ActivityMaterialsFixtures {
 
     HttpStatus createActivityMaterials(UUID activityId, UUID equipmentId) {
         return activityMaterialsClient.create(new CreateActivityMaterialsCommand(activityId, equipmentId)).status()
+    }
+
+    List<ActivityMaterials> listActivityMaterials(UUID activityId) {
+        return activityMaterialsClient.list(activityId).body().data()
     }
 }

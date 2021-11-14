@@ -30,7 +30,7 @@ class DeleteActivitySkillControllerTest extends CheesecakeSpecification implemen
         response.status == HttpStatus.OK
 
         then:
-        def skills = list(activityId)
+        def skills = listActivitySkills(activityId)
         skills.size() == 1
         skills*.id() == [skillId]
 

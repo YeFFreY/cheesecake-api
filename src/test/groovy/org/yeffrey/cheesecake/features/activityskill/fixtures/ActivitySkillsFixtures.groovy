@@ -43,7 +43,7 @@ trait ActivitySkillsFixtures {
         return activitySkillClient.create(new CreateActivitySkillCommand(activityId, skillId)).status()
     }
 
-    List<ActivitySkill> list(UUID activityId) {
+    List<ActivitySkill> listActivitySkills(UUID activityId) {
         return activitySkillClient.list(activityId).body().data()
     }
 

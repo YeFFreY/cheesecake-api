@@ -1,5 +1,5 @@
 plugins {
-    id("groovy") 
+    id("groovy")
     id("com.github.johnrengelman.shadow") version "7.0.0"
     id("io.micronaut.application") version "2.0.6"
     id("nu.studer.jooq") version "6.0.1"

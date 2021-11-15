@@ -92,5 +92,15 @@
         </loadUpdateData>
     </changeSet>
 
+    <changeSet id="operation_types" author="yeffrey" runOnChange="true">
+        <loadUpdateData file="data/operation_types.csv"
+                        primaryKey="id"
+                        quotchar="'"
+                        relativeToChangelogFile="true"
+                        schemaName="public"
+                        tableName="t_operation_type"
+                        usePreparedStatements="true">
+        </loadUpdateData>
+    </changeSet>
 
 </databaseChangeLog>

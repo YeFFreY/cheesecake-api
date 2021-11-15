@@ -1,0 +1,4 @@
+id,description
+SETUP,'Setup the activity'
+CORE,'Core of the activity'
+CLOSING,'Closing the activity'

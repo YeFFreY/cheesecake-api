@@ -14,7 +14,7 @@
                 CONSTRAINT PK__PARTY_TYPE PRIMARY KEY ("id")
             );
             COMMENT
-            ON TABLE T_PARTY_TYPE IS 'Describes whether the party is an organization, a user,... (ORG, USR,...)';
+                ON TABLE T_PARTY_TYPE IS 'Describes whether the party is an organization, a user,... (ORG, USR,...)';
             ]]>
         </sql>
         <rollback>DROP TABLE T_PARTY_TYPE;</rollback>
@@ -40,13 +40,13 @@
                     );
 
             COMMENT
-            ON TABLE T_PARTY IS 'A party is the super type for any... party like a user, an organization (a school, a classroom,...)';
+                ON TABLE T_PARTY IS 'A party is the super type for any... party like a user, an organization (a school, a classroom,...)';
 
             CREATE TRIGGER T_PARTY__LAST_UPDATED
                 BEFORE UPDATE
                 ON T_PARTY
                 FOR EACH ROW
-                EXECUTE FUNCTION update_timestamp();
+            EXECUTE FUNCTION update_timestamp();
             ]]>
         </sql>
         <rollback>DROP TABLE T_PARTY;</rollback>
@@ -63,7 +63,7 @@
             );
 
             COMMENT
-            ON TABLE T_PARTY_RELATIONSHIP_TYPE IS 'Describes the possible relationship between two parties : being a member of, friend of, family relation,...';
+                ON TABLE T_PARTY_RELATIONSHIP_TYPE IS 'Describes the possible relationship between two parties : being a member of, friend of, family relation,...';
             ]]>
         </sql>
         <rollback>DROP TABLE T_PARTY_RELATIONSHIP_TYPE;</rollback>
@@ -75,7 +75,7 @@
             CREATE TABLE T_PARTY_RELATIONSHIP
             (
                 effective_date date        NOT NULL,
-                until_date     date NULL,
+                until_date     date        NULL,
                 type_id        varchar(50) NOT NULL,
                 "to"           uuid        NOT NULL,
                 "from"         uuid        NOT NULL,
@@ -102,7 +102,7 @@
                     );
 
             COMMENT
-            ON TABLE T_PARTY_RELATIONSHIP IS 'Describes the relation between two parties, like "Member of", "Friend", ... If a user is member of an organization, and the organization has "reader" access control on an inventory item, then the user has "reader" access on the inventory item';
+                ON TABLE T_PARTY_RELATIONSHIP IS 'Describes the relation between two parties, like "Member of", "Friend", ... If a user is member of an organization, and the organization has "reader" access control on an inventory item, then the user has "reader" access on the inventory item';
             ]]>
         </sql>
         <rollback>DROP TABLE T_PARTY_RELATIONSHIP;</rollback>
@@ -180,7 +180,7 @@
             );
 
             COMMENT
-            ON TABLE T_ARTIFACT_TYPE IS 'Describes whether the artifact is an activity, a skill, an equipment,...';
+                ON TABLE T_ARTIFACT_TYPE IS 'Describes whether the artifact is an activity, a skill, an equipment,...';
             ]]>
         </sql>
         <rollback>DROP TABLE T_ARTIFACT_TYPE;</rollback>
@@ -207,13 +207,13 @@
                     );
 
             COMMENT
-            ON TABLE T_ARTIFACT IS 'an artifact in general to allow ownership, permission, ... globally';
+                ON TABLE T_ARTIFACT IS 'an artifact in general to allow ownership, permission, ... globally';
 
             CREATE TRIGGER T_ARTIFACT__LAST_UPDATED
                 BEFORE UPDATE
                 ON T_ARTIFACT
                 FOR EACH ROW
-                EXECUTE FUNCTION update_timestamp();
+            EXECUTE FUNCTION update_timestamp();
             ]]>
         </sql>
         <rollback>DROP TABLE T_ARTIFACT;</rollback>
@@ -256,7 +256,7 @@
                     );
 
             COMMENT
-            ON TABLE T_ARTIFACT_TAG IS 'classification of an artifact';
+                ON TABLE T_ARTIFACT_TAG IS 'classification of an artifact';
             ]]>
         </sql>
         <rollback>DROP TABLE T_ARTIFACT_TAG;</rollback>
@@ -267,15 +267,16 @@
             <![CDATA[
             CREATE TABLE T_ACTIVITY
             (
-                published              boolean NOT NULL DEFAULT false,
+                published              boolean   NOT NULL DEFAULT false,
                 duration               int4range NULL,
                 age                    int4range NULL,
                 participants           int4range NULL,
-                difficulty             integer NULL,
-                rating                 integer NULL,
-                participant_goal       text NULL,
-                playground_description text NULL,
-                "id"                   uuid    NOT NULL,
+                difficulty             integer   NULL,
+                rating                 integer   NULL,
+                participant_goal       text      NULL,
+                playground_description text      NULL,
+                rules                  text      NULL,
+                "id"                   uuid      NOT NULL,
                 CONSTRAINT PK__ACTIVITY PRIMARY KEY ("id"),
                 CONSTRAINT FK__ARTIFACT__ACTIVITY FOREIGN KEY ("id") REFERENCES T_ARTIFACT ("id"),
                 CONSTRAINT CHK__ACTIVITY__DIFFICULTY CHECK ( difficulty >= 0 AND difficulty <= 5 ),
@@ -307,7 +308,7 @@
                     );
 
             COMMENT
-            ON TABLE T_EQUIPMENT IS 'Equipment useful to perform the activity';
+                ON TABLE T_EQUIPMENT IS 'Equipment useful to perform the activity';
             ]]>
         </sql>
         <rollback>DROP TABLE T_EQUIPMENT;</rollback>
@@ -337,7 +338,7 @@
                     );
 
             COMMENT
-            ON TABLE T_MATERIALS IS 'materials required to perform the activity';
+                ON TABLE T_MATERIALS IS 'materials required to perform the activity';
             ]]>
         </sql>
         <rollback>DROP TABLE T_MATERIALS;</rollback>
@@ -359,7 +360,7 @@
                     );
 
             COMMENT
-            ON TABLE T_SKILL IS 'Skill improved during the course of an activity';
+                ON TABLE T_SKILL IS 'Skill improved during the course of an activity';
             ]]>
         </sql>
         <rollback>DROP TABLE T_SKILL;</rollback>
@@ -390,7 +391,7 @@
                     );
 
             COMMENT
-            ON TABLE T_ACTIVITY_BENEFIT IS 'How the activity is beneficial to the participant';
+                ON TABLE T_ACTIVITY_BENEFIT IS 'How the activity is beneficial to the participant';
             ]]>
         </sql>
         <rollback>DROP TABLE T_ACTIVITY_BENEFIT;</rollback>
@@ -419,7 +420,7 @@
                     );
 
             COMMENT
-            ON TABLE T_WAREHOUSE_ITEM IS 'An equipment available in the warehouse of the party';
+                ON TABLE T_WAREHOUSE_ITEM IS 'An equipment available in the warehouse of the party';
             ]]>
         </sql>
         <rollback>DROP TABLE T_WAREHOUSE_ITEM;</rollback>
@@ -436,7 +437,7 @@
             );
 
             COMMENT
-            ON TABLE T_OPERATION_TYPE IS 'Type of an operation for the course of the activity like "setup", "core", "closing",...';
+                ON TABLE T_OPERATION_TYPE IS 'Type of an operation for the course of the activity like "setup", "core", "closing",...';
             ]]>
         </sql>
         <rollback>DROP TABLE T_OPERATION_TYPE;</rollback>
@@ -466,7 +467,7 @@
                     );
 
             COMMENT
-            ON TABLE T_OPERATION IS 'Describe each step of the course of the activity';
+                ON TABLE T_OPERATION IS 'Describe each step of the course of the activity';
             ]]>
         </sql>
         <rollback>DROP TABLE T_OPERATION;</rollback>
@@ -483,7 +484,7 @@
             );
 
             COMMENT
-            ON TABLE T_INVENTORY_ACCESS_CONTROL_TYPE IS 'How the party can access the artifact like "owner", "reader", "writer",...';
+                ON TABLE T_INVENTORY_ACCESS_CONTROL_TYPE IS 'How the party can access the artifact like "owner", "reader", "writer",...';
             ]]>
         </sql>
         <rollback>DROP TABLE T_INVENTORY_ACCESS_CONTROL_TYPE;</rollback>
@@ -519,11 +520,32 @@
                     );
 
             COMMENT
-            ON TABLE T_INVENTORY_ITEM IS 'An artifact which belongs to a party, to its "portfolio"';
+                ON TABLE T_INVENTORY_ITEM IS 'An artifact which belongs to a party, to its "portfolio"';
             ]]>
         </sql>
         <rollback>DROP TABLE T_INVENTORY_ITEM;</rollback>
     </changeSet>
 
+    <changeSet id="1.0.21" author="yeffrey">
+        <sql>
+            <![CDATA[
+            CREATE TABLE T_VARIANT
+            (
+                activity_id uuid NOT NULL,
+                description text NOT NULL,
+                "id"        uuid NOT NULL,
+                CONSTRAINT PK__VARIANT PRIMARY KEY ("id"),
+                CONSTRAINT FK__ACTIVITY__VARIANT FOREIGN KEY (activity_id) REFERENCES T_ACTIVITY ("id")
+            );
 
+            CREATE INDEX IDX__VARIANT__ACTIVITY_ID ON T_VARIANT
+                (
+                 activity_id
+                    );
+
+            COMMENT ON TABLE T_VARIANT IS 'Describes each variant of the activity, maybe more difficult, maybe with some different rules,...';
+            ]]>
+        </sql>
+        <rollback>DROP TABLE T_VARIANT;</rollback>
+    </changeSet>
 </databaseChangeLog>

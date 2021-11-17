@@ -531,9 +531,10 @@
             <![CDATA[
             CREATE TABLE T_VARIANT
             (
-                activity_id uuid NOT NULL,
-                description text NOT NULL,
-                "id"        uuid NOT NULL,
+                activity_id uuid                   NOT NULL,
+                description text                   NOT NULL,
+                name        character varying(320) NOT NULL,
+                "id"        uuid                   NOT NULL,
                 CONSTRAINT PK__VARIANT PRIMARY KEY ("id"),
                 CONSTRAINT FK__ACTIVITY__VARIANT FOREIGN KEY (activity_id) REFERENCES T_ACTIVITY ("id")
             );

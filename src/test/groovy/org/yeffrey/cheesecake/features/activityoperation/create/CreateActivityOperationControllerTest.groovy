@@ -65,7 +65,7 @@ class CreateActivityOperationControllerTest extends CheesecakeSpecification impl
     }
 
     void "user cannot associate an operation to an unknown activity"() {
-        given: "an unknown activity and an equipment"
+        given: "an unknown activity"
         def activityId = UUID.randomUUID()
 
         when:

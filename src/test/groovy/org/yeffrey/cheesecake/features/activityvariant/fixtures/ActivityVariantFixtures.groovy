@@ -11,6 +11,7 @@ import jakarta.inject.Inject
 import org.yeffrey.cheesecake.core.infra.rest.CommandResult
 import org.yeffrey.cheesecake.core.infra.rest.QueryResult
 import org.yeffrey.cheesecake.features.activityvariant.create.CreateActivityVariantCommand
+import org.yeffrey.cheesecake.features.activityvariant.delete.DeleteActivityVariantCommand
 import org.yeffrey.cheesecake.features.activityvariant.list.ActivityVariant
 
 @Header(name = "Basic", value = "bob@bob.com secret77")
@@ -23,6 +24,9 @@ interface ActivityVariantClient {
 
     @Get('/{activityId}')
     HttpResponse<QueryResult<List<ActivityVariant>>> list(UUID activityId)
+
+    @Post('/delete')
+    HttpResponse<CommandResult<Void>> delete(@Body DeleteActivityVariantCommand command)
 }
 
 trait ActivityVariantFixtures {
@@ -33,5 +37,9 @@ trait ActivityVariantFixtures {
 
     UUID createActivityVariant(UUID activityId, String name = faker.lorem().sentence(), String description = faker.lorem().sentence()) {
         return activityVariantClient.create(new CreateActivityVariantCommand(activityId, name, description)).body().data()
+    }
+
+    List<ActivityVariant> listActivityVariants(UUID activityId) {
+        return activityVariantClient.list(activityId).body().data()
     }
 }

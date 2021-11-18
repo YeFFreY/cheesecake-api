@@ -13,6 +13,7 @@ import org.yeffrey.cheesecake.core.infra.rest.CommandResult
 import org.yeffrey.cheesecake.core.infra.rest.QueryResult
 import org.yeffrey.cheesecake.features.activityoperation.create.CreateActivityOperationCommand
 import org.yeffrey.cheesecake.features.activityoperation.create.OperationType
+import org.yeffrey.cheesecake.features.activityoperation.delete.DeleteActivityOperationCommand
 import org.yeffrey.cheesecake.features.activityoperation.list.ActivityOperation
 
 @Header(name = "Basic", value = "bob@bob.com secret77")
@@ -28,6 +29,10 @@ interface ActivityOperationClient {
 
     @Get('/{activityId}')
     HttpResponse<QueryResult<List<ActivityOperation>>> list(UUID activityId)
+
+
+    @Post('/delete')
+    HttpResponse<CommandResult<Void>> delete(@Body DeleteActivityOperationCommand command)
 }
 
 trait ActivityOperationFixtures {
@@ -38,5 +43,9 @@ trait ActivityOperationFixtures {
 
     HttpStatus createActivityOperation(UUID activityId, String type, String description = faker.lorem().sentence()) {
         return activityOperationClient.create(new CreateActivityOperationCommand(activityId, type, description)).status()
+    }
+
+    List<ActivityOperation> listActivityOperations(UUID activityId) {
+        return activityOperationClient.list(activityId).body().data()
     }
 }

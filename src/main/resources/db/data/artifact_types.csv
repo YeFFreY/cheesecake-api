@@ -2,3 +2,5 @@ id,description
 ACTIVITY,'An activity'
 SKILL,'A skill'
 EQUIPMENT,'An equipment'
+CALENDAR,'A Calendar'
+CLASS,'A Class of students'

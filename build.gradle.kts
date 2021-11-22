@@ -69,6 +69,7 @@ jooq {
         create("main") {
             jooqConfiguration.apply {
                 logging = org.jooq.meta.jaxb.Logging.WARN
+
                 jdbc.apply {
                     driver = "org.postgresql.Driver"
                     url = "jdbc:postgresql://localhost:5432/cheesecake_dev"

@@ -9,7 +9,7 @@ import org.yeffrey.cheesecake.features.calendar.fixtures.CalendarFixtures
 import org.yeffrey.cheesecake.features.classs.fixtures.ClassFixtures
 import org.yeffrey.cheesecake.features.course.fixtures.CourseFixtures
 
-import java.time.ZonedDateTime
+import java.time.OffsetDateTime
 
 @MicronautTest
 @Property(name = "security.user.bob", value = "true")
@@ -30,8 +30,8 @@ class CreateCourseControllerTest extends CheesecakeSpecification implements Clas
         response.body().data() != null
 
         where:
-        start = ZonedDateTime.now()
-        end = ZonedDateTime.now().plusHours(1)
+        start = OffsetDateTime.now()
+        end = OffsetDateTime.now().plusHours(1)
     }
 
     void "new course requires start and end date"() {
@@ -48,18 +48,18 @@ class CreateCourseControllerTest extends CheesecakeSpecification implements Clas
         error.status == HttpStatus.BAD_REQUEST
 
         where:
-        calendarId        | classId           | start               | end
-        null              | null              | null                | null
-        UUID.randomUUID() | null              | null                | null
-        null              | UUID.randomUUID() | null                | null
-        null              | null              | ZonedDateTime.now() | null
-        null              | null              | null                | ZonedDateTime.now()
+        calendarId        | classId           | start                | end
+        null              | null              | null                 | null
+        UUID.randomUUID() | null              | null                 | null
+        null              | UUID.randomUUID() | null                 | null
+        null              | null              | OffsetDateTime.now() | null
+        null              | null              | null                 | OffsetDateTime.now()
 
     }
 
     void "new course requires known calendar and class id"() {
         given: "invalid command"
-        def invalidCommand = new CreateCourseCommand(UUID.randomUUID(), UUID.randomUUID(), ZonedDateTime.now(), ZonedDateTime.now())
+        def invalidCommand = new CreateCourseCommand(UUID.randomUUID(), UUID.randomUUID(), OffsetDateTime.now(), OffsetDateTime.now())
 
         when: "creates class"
         def response = courseClient.create(invalidCommand)

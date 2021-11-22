@@ -1,7 +1,7 @@
 package org.yeffrey.cheesecake.features.course.create;
 
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
-public record CourseDomain(UUID id, UUID calendarId, UUID classId, ZonedDateTime start, ZonedDateTime end) {
+public record CourseDomain(UUID id, UUID calendarId, UUID classId, OffsetDateTime start, OffsetDateTime end) {
 }

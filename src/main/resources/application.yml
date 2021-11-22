@@ -30,3 +30,6 @@ datasources:
     dialect: POSTGRES
 jackson:
   serialization-inclusion: non_absent
+  serialization:
+    writeDatesAsTimestamps: false
+  time-zone: UTC

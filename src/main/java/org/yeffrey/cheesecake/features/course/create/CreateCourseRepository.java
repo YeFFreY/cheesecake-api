@@ -18,7 +18,7 @@ public class CreateCourseRepository {
     public void create(CourseDomain course) {
         ctx
                 .insertInto(T_EVENT, T_EVENT.ID, T_EVENT.CALENDAR_ID, T_EVENT.START_DATE, T_EVENT.END_DATE)
-                .values(course.id(), course.calendarId(), course.start().toOffsetDateTime(), course.end().toOffsetDateTime())
+                .values(course.id(), course.calendarId(), course.start(), course.end())
                 .execute();
         ctx
                 .insertInto(T_COURSE, T_COURSE.ID, T_COURSE.CLASS_ID)

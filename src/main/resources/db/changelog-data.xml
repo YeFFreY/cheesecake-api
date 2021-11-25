@@ -103,4 +103,14 @@
         </loadUpdateData>
     </changeSet>
 
+    <changeSet id="event_types" author="yeffrey" runOnChange="true">
+        <loadUpdateData file="data/event_types.csv"
+                        primaryKey="id"
+                        quotchar="'"
+                        relativeToChangelogFile="true"
+                        schemaName="public"
+                        tableName="t_event_type"
+                        usePreparedStatements="true">
+        </loadUpdateData>
+    </changeSet>
 </databaseChangeLog>

@@ -588,29 +588,54 @@
         <rollback>DROP TABLE T_CALENDAR;</rollback>
     </changeSet>
 
+
     <changeSet id="1.0.24" author="yeffrey">
+        <sql>
+            <![CDATA[
+            CREATE TABLE T_EVENT_TYPE
+            (
+                "id"        varchar(50) NOT NULL,
+                description text        NOT NULL,
+                CONSTRAINT PK__EVENT_TYPE PRIMARY KEY ("id")
+            );
+
+            COMMENT ON TABLE T_EVENT_TYPE IS 'Describes which kind of event are managed, like COURSE, MEETING, ...';
+            ]]>
+        </sql>
+        <rollback>DROP TABLE T_EVENT_TYPE;</rollback>
+    </changeSet>
+
+
+    <changeSet id="1.0.25" author="yeffrey">
         <sql>
             <![CDATA[
             CREATE TABLE T_EVENT
             (
-                "id"        uuid                     NOT NULL,
                 calendar_id uuid                     NOT NULL,
+                type_id     varchar(50)              NOT NULL,
                 start_date  timestamp with time zone NOT NULL,
                 end_date    timestamp with time zone NOT NULL,
+                "id"        uuid                     NOT NULL,
                 CONSTRAINT PK__EVENT PRIMARY KEY ("id"),
-                CONSTRAINT FK__CALENDAR__EVENT FOREIGN KEY (calendar_id) REFERENCES T_CALENDAR ("id")
+                CONSTRAINT FK__CALENDAR__EVENT FOREIGN KEY (calendar_id) REFERENCES T_CALENDAR ("id"),
+                CONSTRAINT FK__EVENT_TYPE__EVENT FOREIGN KEY (type_id) REFERENCES T_EVENT_TYPE ("id")
             );
 
             CREATE INDEX IDX__EVENT__CALENDAR_ID ON T_EVENT
                 (
                  calendar_id
                     );
+
+            CREATE INDEX IDX__EVENT__TYPE_ID ON T_EVENT
+                (
+                 type_id
+                    );
             ]]>
         </sql>
         <rollback>DROP TABLE T_EVENT;</rollback>
     </changeSet>
 
-    <changeSet id="1.0.25" author="yeffrey">
+    <changeSet id="1.0.26" author="yeffrey">
         <sql>
             <![CDATA[
             CREATE TABLE T_COURSE
@@ -637,5 +662,6 @@
         </sql>
         <rollback>DROP TABLE T_COURSE;</rollback>
     </changeSet>
+
 
 </databaseChangeLog>

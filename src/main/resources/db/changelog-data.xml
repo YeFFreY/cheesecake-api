@@ -113,4 +113,15 @@
                         usePreparedStatements="true">
         </loadUpdateData>
     </changeSet>
+
+    <changeSet id="course_section_types" author="yeffrey" runOnChange="true">
+        <loadUpdateData file="data/course_section_types.csv"
+                        primaryKey="id"
+                        quotchar="'"
+                        relativeToChangelogFile="true"
+                        schemaName="public"
+                        tableName="t_course_section_type"
+                        usePreparedStatements="true">
+        </loadUpdateData>
+    </changeSet>
 </databaseChangeLog>

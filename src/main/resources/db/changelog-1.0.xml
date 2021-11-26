@@ -663,5 +663,96 @@
         <rollback>DROP TABLE T_COURSE;</rollback>
     </changeSet>
 
+    <changeSet id="1.0.27" author="yeffrey">
+        <sql>
+            <![CDATA[
+            CREATE TABLE T_COURSE_SECTION_TYPE
+            (
+                "id"        character varying(50) NOT NULL,
+                description text                  NOT NULL,
+                CONSTRAINT PK__COURSE_SECTION_TYPE PRIMARY KEY ("id")
+            );
+            ]]>
+        </sql>
+        <rollback>DROP TABLE T_COURSE_SECTION_TYPE;</rollback>
+    </changeSet>
+
+    <changeSet id="1.0.28" author="yeffrey">
+        <sql>
+            <![CDATA[
+            CREATE TABLE T_ACTIVITY_GROUP_TYPE
+            (
+                "id"        character varying(50) NOT NULL,
+                description text                  NOT NULL,
+                CONSTRAINT PK__ACTIVITY_GROUP_TYPE PRIMARY KEY ("id")
+            );
+            ]]>
+        </sql>
+        <rollback>DROP TABLE T_ACTIVITY_GROUP_TYPE;</rollback>
+    </changeSet>
+
+    <changeSet id="1.0.29" author="yeffrey">
+        <sql>
+            <![CDATA[
+            CREATE TABLE T_ACTIVITY_GROUP
+            (
+                "id"    uuid                  NOT NULL,
+                type_id character varying(50) NOT NULL,
+                CONSTRAINT PK__ACTIVITY_GROUP PRIMARY KEY ("id"),
+                CONSTRAINT FK__ACTIVITY_GROUP_TYPE__ACTIVITY_GROUP FOREIGN KEY (type_id) REFERENCES T_ACTIVITY_GROUP_TYPE ("id")
+            );
+
+            CREATE INDEX IDX__ACTIVITY_GROUP__TYPE_ID ON T_ACTIVITY_GROUP
+                (
+                 type_id
+                    );
+
+            COMMENT ON TABLE T_ACTIVITY_GROUP IS 'Describes how activities are sometimes used together as a group, for instance as a "parcours", as an "atelier",... This should allow reuse of group of activities used often together';
+            ]]>
+        </sql>
+        <rollback>DROP TABLE T_ACTIVITY_GROUP;</rollback>
+    </changeSet>
+
+    <changeSet id="1.0.30" author="yeffrey">
+        <sql>
+            <![CDATA[
+            CREATE TABLE T_COURSE_SECTION
+            (
+                activity_id uuid                  NOT NULL,
+                group_id    uuid                  NULL,
+                type_id     character varying(50) NOT NULL,
+                course_id   uuid                  NOT NULL,
+                CONSTRAINT PK__COURSE_SECTION PRIMARY KEY (type_id, course_id),
+                CONSTRAINT FK__ACTIVITY__COURSE_SECTION FOREIGN KEY (activity_id) REFERENCES T_ACTIVITY ("id"),
+                CONSTRAINT FK__COURSE__COURSE_SECTION FOREIGN KEY (course_id) REFERENCES T_COURSE ("id"),
+                CONSTRAINT FK__ACTIVITY_GROUP__COURSE_SECTION FOREIGN KEY (group_id) REFERENCES T_ACTIVITY_GROUP ("id"),
+                CONSTRAINT FK__COURSE_SECTION_TYPE__COURSE_SECTION FOREIGN KEY (type_id) REFERENCES T_COURSE_SECTION_TYPE ("id")
+            );
+
+            CREATE INDEX IDX__COURSE_SECTION__ACTIVITY_ID ON T_COURSE_SECTION
+                (
+                 activity_id
+                    );
+
+            CREATE INDEX IDX__COURSE_SECTION__COURSE_ID ON T_COURSE_SECTION
+                (
+                 course_id
+                    );
+
+            CREATE INDEX IDX__COURSE_SECTION__GROUP_ID ON T_COURSE_SECTION
+                (
+                 group_id
+                    );
+
+            CREATE INDEX IDX__COURSE_SECTION__TYPE_ID ON T_COURSE_SECTION
+                (
+                 type_id
+                    );
+
+            COMMENT ON TABLE T_COURSE_SECTION IS 'A section of a course is for instance a "mise en train", a "coeur de séance", a "retour au calme" and so contains all activities related to that section';
+            ]]>
+        </sql>
+        <rollback>DROP TABLE T_COURSE_SECTION;</rollback>
+    </changeSet>
 
 </databaseChangeLog>

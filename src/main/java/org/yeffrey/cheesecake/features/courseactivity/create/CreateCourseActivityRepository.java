@@ -49,4 +49,13 @@ public class CreateCourseActivityRepository {
                 .from(T_COURSE_SECTION_TYPE)
                 .fetchInto(SectionType.class);
     }
+
+    public List<ActivityOverview> listAvailableActivities(UUID userId) {
+        return ctx.select(T_ARTIFACT.ID, T_ARTIFACT.NAME, T_ARTIFACT.DESCRIPTION)
+                .from(T_ARTIFACT)
+                .innerJoin(T_INVENTORY_ITEM).on(T_INVENTORY_ITEM.ARTIFACT_ID.eq(T_ARTIFACT.ID))
+                .where(T_ARTIFACT.TYPE_ID.eq("ACTIVITY"))
+                .and(T_INVENTORY_ITEM.PARTY_ID.eq(userId))
+                .fetchInto(ActivityOverview.class);
+    }
 }

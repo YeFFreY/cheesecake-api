@@ -722,7 +722,7 @@
                 group_id    uuid                  NULL,
                 type_id     character varying(50) NOT NULL,
                 course_id   uuid                  NOT NULL,
-                CONSTRAINT PK__COURSE_SECTION PRIMARY KEY (type_id, course_id),
+                CONSTRAINT PK__COURSE_SECTION PRIMARY KEY (type_id, course_id, activity_id),
                 CONSTRAINT FK__ACTIVITY__COURSE_SECTION FOREIGN KEY (activity_id) REFERENCES T_ACTIVITY ("id"),
                 CONSTRAINT FK__COURSE__COURSE_SECTION FOREIGN KEY (course_id) REFERENCES T_COURSE ("id"),
                 CONSTRAINT FK__ACTIVITY_GROUP__COURSE_SECTION FOREIGN KEY (group_id) REFERENCES T_ACTIVITY_GROUP ("id"),

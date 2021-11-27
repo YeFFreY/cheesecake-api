@@ -26,6 +26,11 @@ public class CreateCourseActivityController {
         return new QueryResult<>(service.listAvailableTypes());
     }
 
+    @Get("/activities")
+    public QueryResult<List<ActivityOverview>> listAvailableActivities() {
+        return new QueryResult<>(service.listAvailableActivities());
+    }
+
     @Post
     @Status(HttpStatus.CREATED)
     public Optional<CommandResult<UUID>> create(@Valid @Body CreateCourseActivityCommand command) {

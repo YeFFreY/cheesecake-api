@@ -40,4 +40,9 @@ public class CreateCourseActivityService {
     public List<SectionType> listAvailableTypes() {
         return this.repository.listAvailableTypes();
     }
+
+    @Transactional
+    public List<ActivityOverview> listAvailableActivities() {
+        return this.repository.listAvailableActivities(userIdHelper.getCurrentOrThrow());
+    }
 }

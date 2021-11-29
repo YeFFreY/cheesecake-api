@@ -23,7 +23,7 @@ class CreateCourseActivityControllerTest extends CheesecakeSpecification impleme
         def activityId = createActivity()
 
 
-        when: "adding a variant to the activity"
+        when: "adding an activity to the course"
         var response = courseActivityClient.create(new CreateCourseActivityCommand(courseId, activityId, "WARM_UP"))
 
         then:

@@ -32,7 +32,7 @@ class ListEventControllerTest extends CheesecakeSpecification implements ClassFi
         createCourse(calendarId2, classId3, start2, start2.plusHours(1))
 
         when: "bob request the list of his classes"
-        var response = eventClient.list(calendarId, OffsetDateTime.now().toString())
+        var response = eventClient.list(calendarId, weekToday.toString())
 
         then:
         response.status == HttpStatus.OK
@@ -49,6 +49,7 @@ class ListEventControllerTest extends CheesecakeSpecification implements ClassFi
         className2 = faker.lorem().sentence()
         start1 = OffsetDateTime.of(LocalDateTime.of(2021, 11, 25, 0, 0, 0), ZoneOffset.ofHours(0))
         start2 = OffsetDateTime.of(LocalDateTime.of(2021, 11, 25, 0, 0, 0), ZoneOffset.ofHours(0))
+        weekToday = OffsetDateTime.of(LocalDateTime.of(2021, 11, 22, 0, 0, 0), ZoneOffset.ofHours(0))
 
     }
 

@@ -12,6 +12,7 @@ import jakarta.inject.Inject
 import org.yeffrey.cheesecake.core.infra.rest.CommandResult
 import org.yeffrey.cheesecake.core.infra.rest.QueryResult
 import org.yeffrey.cheesecake.features.courseactivity.create.CreateCourseActivityCommand
+import org.yeffrey.cheesecake.features.courseactivity.delete.DeleteCourseActivityCommand
 import org.yeffrey.cheesecake.features.courseactivity.list.CourseActivity
 
 @Header(name = "Basic", value = "bob@bob.com secret77")
@@ -24,6 +25,10 @@ interface CourseActivityClient {
 
     @Get('/{courseId}')
     HttpResponse<QueryResult<List<CourseActivity>>> list(UUID courseId)
+
+
+    @Post('/delete')
+    HttpResponse<CommandResult<UUID>> delete(@Body DeleteCourseActivityCommand command)
 }
 
 trait CourseActivityFixtures {
@@ -35,5 +40,10 @@ trait CourseActivityFixtures {
 
     HttpStatus createCourseActivity(UUID courseId, UUID activityId, String type = "WARM_UP") {
         return courseActivityClient.create(new CreateCourseActivityCommand(courseId, activityId, type)).status()
+    }
+
+
+    List<CourseActivity> listCourseActivities(UUID courseId) {
+        return courseActivityClient.list(courseId).body().data()
     }
 }
